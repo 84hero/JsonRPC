@@ -25,8 +25,8 @@ class HostValidator
     {
         if (!empty($hosts)) {
             foreach ($hosts as $host) {
-                if (self::ipMatch($remoteAddress,$host)) {
-                    return true;
+                if (self::ipMatch($remoteAddress, $host)) {
+                    return;
                 }
             }
             throw new AccessDeniedException('Access Forbidden');
@@ -41,6 +41,7 @@ class HostValidator
      */
     public static function ipMatch($remoteAddress, $host)
     {
+        $host = trim($host);
         if (strpos($host, '/') !== false) {
             list($network, $mask) = explode('/', $host);
             if (self::netMatch($remoteAddress, $network, $mask)) {
@@ -51,6 +52,8 @@ class HostValidator
         if ($host === $remoteAddress) {
             return true;
         }
+
+        return false;
     }
 
     /**
